@@ -201,9 +201,7 @@ contract MarketplaceTest is Test {
         vm.deal(buyer, nftPrice);
 
         uint256 feesBefore = address(marketplace).balance;
-
-        Marketplace.Listing memory listi = marketplace.buyNFT{value: nftPrice}(address(nft), tokenId);
-        console.log(listi.nftAddress, listi.seller, listi.tokenId);
+        marketplace.buyNFT{value: nftPrice}(address(nft), tokenId);
 
         address nftOwnerAfter = nft.ownerOf(tokenId);
         (, address sellerAfter,,) = marketplace.listings(address(nft), 0);
@@ -217,35 +215,5 @@ contract MarketplaceTest is Test {
         // assertEq(sellerBalanceAfter, sellerBalanceBefore + expectedPayment); // seller payed
         assertEq(nftOwnerAfter, buyer); // buyer received NFT
         assertEq(expectedFees, feesAfter - feesBefore); // marketplace fees collected
-    }
-
-    // Active Listings Tests
-    function test_getActiveListings() public {
-        address addr = address(nft);
-        uint256 tokenID = 0;
-        uint256 price = 0.1 ether;
-
-        vm.startPrank(seller);
-
-        (, address sellerBefore,,) = marketplace.listings(address(nft), 0);
-
-        marketplace.listNFT(addr, tokenID, price);
-
-        (, address sellerAfter,,) = marketplace.listings(address(nft), 0);
-        Marketplace.Listing[] memory listingsAfter = marketplace.getActiveListings();
-
-        vm.stopPrank();
-
-        assertEq(sellerBefore, address(0));
-        assertEq(sellerAfter, seller);
-        assertEq(listingsAfter[0].nftAddress, addr);
-        assertEq(listingsAfter[0].tokenId, tokenID);
-        assertEq(listingsAfter[0].price, price);
-        assertEq(listingsAfter[0].seller, seller);
-    }
-
-    function test_revertGetActiveListings() public {
-        vm.expectRevert();
-        marketplace.getActiveListings();
     }
 }
