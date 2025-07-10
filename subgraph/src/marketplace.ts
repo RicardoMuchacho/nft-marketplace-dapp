@@ -4,33 +4,14 @@ import {
   unlisted as unlistedEvent
 } from "../generated/Marketplace/Marketplace"
 import {
-  boughtNFT,
-  listed,
-  unlisted
+  Listing
 } from "../generated/schema"
-
-export function handleboughtNFT(event: boughtNFTEvent): void {
-  let entity = new boughtNFT(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.buyer = event.params.buyer
-  entity.listing_nftAddress = event.params.listing.nftAddress
-  entity.listing_seller = event.params.listing.seller
-  entity.listing_tokenId = event.params.listing.tokenId
-  entity.listing_price = event.params.listing.price
-  entity.fees = event.params.fees
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
+import { store } from '@graphprotocol/graph-ts'
 
 export function handlelisted(event: listedEvent): void {
-  let entity = new listed(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
+  let id = event.params.nftAddress.toHex() + "-" + event.params.tokenId.toString();
+  let entity = new Listing(id)
+
   entity.seller = event.params.seller
   entity.nftAddress = event.params.nftAddress
   entity.tokenId = event.params.tokenId
@@ -43,19 +24,12 @@ export function handlelisted(event: listedEvent): void {
   entity.save()
 }
 
+export function handleboughtNFT(event: boughtNFTEvent): void {
+    let id = event.params.listing.nftAddress.toHex() + "-" + event.params.listing.tokenId.toString();
+    store.remove("Listing", id);
+  }
+
 export function handleunlisted(event: unlistedEvent): void {
-  let entity = new unlisted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.seller = event.params.seller
-  entity.listing_nftAddress = event.params.listing.nftAddress
-  entity.listing_seller = event.params.listing.seller
-  entity.listing_tokenId = event.params.listing.tokenId
-  entity.listing_price = event.params.listing.price
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let id = event.params.listing.nftAddress.toHex() + "-" + event.params.listing.tokenId.toString();
+  store.remove("Listing", id);
 }

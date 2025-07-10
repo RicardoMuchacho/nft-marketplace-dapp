@@ -16,9 +16,7 @@ dataSources:
           apiVersion: 0.0.9
           language: wasm/assemblyscript
           entities:
-              - boughtNFT
-              - listed
-              - unlisted
+              - Listing
           abis:
               - name: Marketplace
                 file: ./abis/Marketplace.json
