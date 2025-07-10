@@ -1,33 +1,13 @@
 import {
-  OwnershipTransferred as OwnershipTransferredEvent,
   boughtNFT as boughtNFTEvent,
-  feesCollected as feesCollectedEvent,
   listed as listedEvent,
   unlisted as unlistedEvent
 } from "../generated/Marketplace/Marketplace"
 import {
-  OwnershipTransferred,
   boughtNFT,
-  feesCollected,
   listed,
   unlisted
 } from "../generated/schema"
-
-export function handleOwnershipTransferred(
-  event: OwnershipTransferredEvent
-): void {
-  let entity = new OwnershipTransferred(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousOwner = event.params.previousOwner
-  entity.newOwner = event.params.newOwner
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
 
 export function handleboughtNFT(event: boughtNFTEvent): void {
   let entity = new boughtNFT(
@@ -38,19 +18,6 @@ export function handleboughtNFT(event: boughtNFTEvent): void {
   entity.listing_seller = event.params.listing.seller
   entity.listing_tokenId = event.params.listing.tokenId
   entity.listing_price = event.params.listing.price
-  entity.fees = event.params.fees
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handlefeesCollected(event: feesCollectedEvent): void {
-  let entity = new feesCollected(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
   entity.fees = event.params.fees
 
   entity.blockNumber = event.block.number
