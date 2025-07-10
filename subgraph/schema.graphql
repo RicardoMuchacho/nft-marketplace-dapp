@@ -1,12 +1,3 @@
-type OwnershipTransferred @entity(immutable: true) {
-    id: Bytes!
-    previousOwner: Bytes! # address
-    newOwner: Bytes! # address
-    blockNumber: BigInt!
-    blockTimestamp: BigInt!
-    transactionHash: Bytes!
-}
-
 type boughtNFT @entity(immutable: true) {
     id: Bytes!
     buyer: Bytes! # address
@@ -14,14 +5,6 @@ type boughtNFT @entity(immutable: true) {
     listing_seller: Bytes! # address
     listing_tokenId: BigInt! # uint256
     listing_price: BigInt! # uint256
-    fees: BigInt! # uint256
-    blockNumber: BigInt!
-    blockTimestamp: BigInt!
-    transactionHash: Bytes!
-}
-
-type feesCollected @entity(immutable: true) {
-    id: Bytes!
     fees: BigInt! # uint256
     blockNumber: BigInt!
     blockTimestamp: BigInt!
