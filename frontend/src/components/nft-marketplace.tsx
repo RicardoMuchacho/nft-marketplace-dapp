@@ -6,10 +6,10 @@ import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContrac
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wallet } from "lucide-react"
-import { NFTMarketplaceABI, NftsABI, NftMintingABI } from "@/lib/abi"
+import { NFTMarketplaceABI, ERC721_ABI, NftMintingABI } from "@/lib/abi"
 import MyNftsTab from "./my-nfts-tab"
 import MarketplaceNftsTab from "./listings-tab"
-import useContractInteractions from "@/hooks/contractInteractions"
+import useContractInteractions from "@/hooks/useContractInteractions"
 import useGetMyNfts from "@/hooks/useGetMyNfts"
 import { arbitrumSepolia } from "wagmi/chains"
 
