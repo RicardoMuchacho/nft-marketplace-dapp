@@ -24,7 +24,7 @@ contract Marketplace is Ownable, ReentrancyGuard {
     // Nested mapping
     mapping(address nftAddress => mapping(uint256 tokenId => Listing)) public listings;
 
-    event listed(address indexed seller, address indexed nftAddress, uint256 indexed tokenI, uint256 price, string tokenUri);
+    event listed(address indexed seller, address indexed nftAddress, uint256 indexed tokenId, uint256 price, string tokenUri);
     event unlisted(address indexed seller, Listing listing);
     event boughtNFT(address buyer, Listing listing, uint256 fees);
     event feesCollected(uint256 fees);
