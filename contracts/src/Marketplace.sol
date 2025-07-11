@@ -36,7 +36,13 @@ contract Marketplace is Ownable, ReentrancyGuard {
         require(price_ > 0, "Price can't be 0");
         require(IERC721(nftAddress_).ownerOf(tokenId_) == msg.sender, "Only owner can list NFT");
 
-        string memory tokenUri = IERC721Metadata(nftAddress_).tokenURI(tokenId_);
+        string memory tokenUri;
+
+        try IERC721Metadata(nftAddress_).tokenURI(tokenId_) returns (string memory uri) {
+            tokenUri = uri;
+        } catch {
+            tokenUri = "";
+        }
 
         Listing memory listing_ =
             Listing({nftAddress: nftAddress_, seller: msg.sender, tokenId: tokenId_, price: price_});
