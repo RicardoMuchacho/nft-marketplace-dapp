@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { NFTMarketplaceABI } from "@/lib/abi"
 import { Listing } from "@/hooks/useGetListings"
 import { useNftMetadata } from "@/hooks/useNftMetadata"
+import { MARKETPLACE_CONTRACT_ADDRESS } from "@/lib/constants"
 
 interface NFTBuyCardProps {
     nft: Listing;
@@ -21,15 +22,16 @@ export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
     const { data, isLoading: isLoadingMetadata, error } = useNftMetadata(nft.tokenUri);
     const { writeContract, isPending } = useWriteContract()
 
+    console.log("thisnft", nft)
     const handleBuy = () => {
         setIsLoading(true)
         writeContract(
             {
-                address: nft.nftAddress as `0x${string}`,
+                address: MARKETPLACE_CONTRACT_ADDRESS as `0x${string}`,
                 abi: NFTMarketplaceABI,
-                functionName: "createMarketSale",
-                args: [BigInt(nft.tokenId)],
-                value: parseEther(nft.price),
+                functionName: "buyNFT",
+                args: [nft.nftAddress, BigInt(nft.tokenId)],
+                value: BigInt(nft.price),
             },
             {
                 onSuccess: () => {
@@ -45,7 +47,6 @@ export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
         )
     }
 
-    console.log(nft)
     return (
         <Card className="overflow-hidden transition-all hover:shadow-md">
             <div className="relative aspect-square bg-muted">
