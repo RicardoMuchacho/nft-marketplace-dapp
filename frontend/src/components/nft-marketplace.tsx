@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wallet } from "lucide-react"
 import { NFTMarketplaceABI, NftsABI, NftMintingABI } from "@/lib/abi"
 import MyNftsTab from "./my-nfts-tab"
-import MarketplaceNftsTab from "./marketplace-nfts-tab"
+import MarketplaceNftsTab from "./listings-tab"
 import useContractInteractions from "@/hooks/contractInteractions"
 import useGetMyNfts from "@/hooks/useGetMyNfts"
 import { arbitrumSepolia } from "wagmi/chains"
@@ -54,8 +54,8 @@ export default function NFTMarketplace() {
                 <Tabs defaultValue="my-nfts" className="w-full">
                     <div className="flex justify-between gap-2">
                         <TabsList className="mb-6">
-                            {/* <TabsTrigger value="marketplace">Marketplace</TabsTrigger> */}
                             <TabsTrigger value="my-nfts">My NFTs</TabsTrigger>
+                            <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
                         </TabsList>
                         <div className="flex gap-2">
                             <Button disabled={isPending} onClick={mintTestNFT}>Mint Test NFT</Button>

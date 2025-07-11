@@ -9,13 +9,24 @@ import { useAccount } from "wagmi";
 import { alchemy } from '@/lib/alchemyClient';
 import { Plus } from "lucide-react"
 import NFTBuyCard from "./nft-buy-card";
+import { useQuery } from '@tanstack/react-query'
+import { getListings } from "@/app/api/subgraph";
 
 const MarketplaceNftsTab = () => {
+
+    const { data, status } = useQuery({
+        queryKey: ["listings"],
+        queryFn: getListings,
+    })
 
     const [nfts, setNfts] = useState<Nft[]>([])
     const [loading, setLoading] = useState(true)
 
     const { address: userAddress, isConnected } = useAccount()
+
+
+
+    console.log("data:", data)
 
     useEffect(() => {
         if (!userAddress) return;
