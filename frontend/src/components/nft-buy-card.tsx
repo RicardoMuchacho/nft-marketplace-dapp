@@ -7,23 +7,25 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { NFTMarketplaceABI } from "@/lib/abi"
+import { Listing } from "@/hooks/useGetListings"
+import { useNftMetadata } from "@/hooks/useNftMetadata"
 
 interface NFTBuyCardProps {
-    nft: any
+    nft: Listing;
     onSuccess?: () => void
 }
 
 export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
     const [isLoading, setIsLoading] = useState(false)
-    const [imageLoaded, setImageLoaded] = useState(false)
 
+    const { data, isLoading: isLoadingMetadata, error } = useNftMetadata(nft.tokenUri);
     const { writeContract, isPending } = useWriteContract()
 
     const handleBuy = () => {
         setIsLoading(true)
         writeContract(
             {
-                address: nft.contract.address as `0x${string}`,
+                address: nft.nftAddress as `0x${string}`,
                 abi: NFTMarketplaceABI,
                 functionName: "createMarketSale",
                 args: [BigInt(nft.tokenId)],
@@ -43,26 +45,28 @@ export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
         )
     }
 
+    console.log(nft)
     return (
         <Card className="overflow-hidden transition-all hover:shadow-md">
             <div className="relative aspect-square bg-muted">
-                {!imageLoaded && <Skeleton className="absolute inset-0 h-full w-full" />}
-                <img
-                    src={nft.image || "/placeholder.svg"}
-                    alt={nft.name}
-                    className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
-                    onLoad={() => setImageLoaded(true)}
-                />
+                {isLoadingMetadata ?
+                    <Skeleton className="absolute inset-0 h-full w-full" />
+                    : (
+                        <img
+                            src={data?.image || "/placeholder.svg"}
+                            className={`h-full w-full object-cover transition-opacity duration-300 ${!isLoadingMetadata ? "opacity-100" : "opacity-0"}`}
+                        />
+                    )}
             </div>
             <CardHeader>
-                <CardTitle className="text-lg">{nft.name}</CardTitle>
-                <CardDescription className="line-clamp-2">{nft.description}</CardDescription>
+                <CardTitle className="text-lg">{data?.name}</CardTitle>
+                <CardDescription className="line-clamp-2">{data?.description}</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-sm text-muted-foreground">Price</p>
-                        <p className="font-medium">{formatEther(nft.price)} ETH</p>
+                        <p className="font-medium">{formatEther(BigInt(nft.price))} ETH</p>
                     </div>
                     <div>
                         <p className="text-sm text-muted-foreground">Token ID</p>

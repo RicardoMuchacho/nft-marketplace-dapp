@@ -7,6 +7,7 @@ const GET_LISTINGS = gql`{
     nftAddress
     tokenId
     price
+    tokenUri
     transactionHash
   }
 }`
