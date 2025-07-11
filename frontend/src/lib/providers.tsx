@@ -9,12 +9,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 // Create a client
 const queryClient = new QueryClient()
+const alchemyRpcUrl = `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
 
 export const config = createConfig({
     chains: [arbitrumSepolia],
     transports: {
         // [mainnet.id]: http(),
-        [arbitrumSepolia.id]: http(),
+        [arbitrumSepolia.id]: http(alchemyRpcUrl),
     },
     connectors: [
         injected()

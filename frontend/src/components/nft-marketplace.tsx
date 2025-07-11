@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { formatEther, parseEther } from "viem"
-import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract, useBalance, useReadContracts } from "wagmi"
+import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract, useBalance, useReadContracts, useSwitchChain } from "wagmi"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wallet } from "lucide-react"
@@ -11,13 +11,25 @@ import MyNftsTab from "./my-nfts-tab"
 import MarketplaceNftsTab from "./marketplace-nfts-tab"
 import useContractInteractions from "@/hooks/contractInteractions"
 import useGetMyNfts from "@/hooks/useGetMyNfts"
+import { arbitrumSepolia } from "wagmi/chains"
 
 export default function NFTMarketplace() {
-    const { address: userAddress, isConnected } = useAccount()
+    const { address: userAddress, isConnected, chain } = useAccount()
     const { connect, connectors } = useConnect()
+    const { switchChain } = useSwitchChain()
     const { disconnect } = useDisconnect()
     const { mintTestNFT, isPending } = useContractInteractions()
     const { myNfts, refetchNFTs, loading } = useGetMyNfts()
+
+    useEffect(() => {
+        if (isConnected && chain?.id !== arbitrumSepolia.id) {
+            switchChain({ chainId: arbitrumSepolia.id })
+        }
+    }, [isConnected, chain])
+
+    const handleConnect = async () => {
+        connect({ connector: connectors[0] });
+    }
 
     return (
         <div className="container mx-auto py-8 px-4">
@@ -57,7 +69,7 @@ export default function NFTMarketplace() {
                 <div className="flex flex-col text-center justify-center py-20">
                     <h2 className="text-2xl font-semibold mb-4">Connect your wallet to view NFTs</h2>
                     <p className="text-muted-foreground mb-6">You need to connect your wallet to interact with the marketplace</p>
-                    <Button onClick={() => connect({ connector: connectors[0] })} size="lg" className="fle m-auto items-center gap-2">
+                    <Button onClick={handleConnect} size="lg" className="fle m-auto items-center gap-2">
                         <Wallet className="h-5 w-5" />
                         Connect Wallet
                     </Button>
