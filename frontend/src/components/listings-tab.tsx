@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { TabsContent } from "@/components/ui/tabs"
 import NFTBuyCard from "./nft-buy-card";
 import { Listing, useGetListings } from "@/hooks/useGetListings";
 
 const MarketplaceNftsTab = () => {
-    const { data, isLoading, error } = useGetListings()
-    console.log("data:", data)
+    const { data, isLoading } = useGetListings()
 
     return (
         <TabsContent value="marketplace" className="space-y-4">

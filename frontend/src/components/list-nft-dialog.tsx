@@ -32,7 +32,6 @@ export default function ListNFTDialog({ nft, onSuccess, onClose }: ListNFTDialog
 
         const checkApproval = async () => {
             const res = await checkNFTApproval(nft);
-            console.log(res);
             setIsApproved(res);
         }
         checkApproval();

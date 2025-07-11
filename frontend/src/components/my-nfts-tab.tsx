@@ -3,7 +3,6 @@ import { OwnedNft } from "alchemy-sdk";
 import NFTOwnedCard from "./nft-owned-card";
 import { TabsContent } from "@/components/ui/tabs"
 import ListNFTDialog from "./list-nft-dialog";
-import useGetMyNfts from "@/hooks/useGetMyNfts";
 
 interface MyNftsTabProps {
     myNfts: OwnedNft[];
@@ -36,6 +35,5 @@ const MyNftsTab = ({ myNfts, loading }: MyNftsTabProps) => {
         </TabsContent>
     )
 }
-
 
 export default MyNftsTab

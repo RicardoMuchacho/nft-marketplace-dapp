@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { formatEther, parseEther } from "viem"
+import { formatEther } from "viem"
 import { useWriteContract } from "wagmi"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,6 @@ export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
     const { data, isLoading: isLoadingMetadata, error } = useNftMetadata(nft.tokenUri);
     const { writeContract, isPending } = useWriteContract()
 
-    console.log("thisnft", nft)
     const handleBuy = () => {
         setIsLoading(true)
         writeContract(
@@ -89,4 +88,3 @@ export default function NFTBuyCard({ nft, onSuccess }: NFTBuyCardProps) {
         </Card>
     )
 }
-

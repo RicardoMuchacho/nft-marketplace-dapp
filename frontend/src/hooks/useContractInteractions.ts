@@ -38,12 +38,11 @@ export default function useContractInteractions() {
 
     const mintTestNFT = async () => {
         try {
-            const res = writeContract({
+            writeContract({
                 address: NFT_MINT_ADDRESS,
                 abi: NftMintingABI,
                 functionName: "mint"
             });
-            console.log(res)
         } catch (error) {
             console.log(error)
         }

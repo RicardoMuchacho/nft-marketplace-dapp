@@ -1,12 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { parseEther } from "viem"
-import { useWriteContract } from "wagmi"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { NFTMarketplaceABI } from "@/lib/abi"
 import { OwnedNft } from "alchemy-sdk"
 
 interface NFTOwnedCardProps {

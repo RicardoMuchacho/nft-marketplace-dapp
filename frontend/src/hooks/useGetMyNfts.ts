@@ -2,9 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { alchemy } from '@/lib/alchemyClient';
 import { useAccount } from "wagmi";
 import { OwnedNft } from "alchemy-sdk";
-// import { NFTMarketplaceABI } from "@/lib/abi";
-// import { MARKETPLACE_CONTRACT_ADDRESS } from "@/lib/constants";
-// import { parseAbiItem, keccak256, toBytes} from "viem";
 
 export default function useGetMyNfts() {
     const [myNfts, setMyNfts] = useState<OwnedNft[]>([]);
