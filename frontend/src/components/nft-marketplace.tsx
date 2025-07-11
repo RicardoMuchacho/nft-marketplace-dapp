@@ -21,7 +21,7 @@ export default function NFTMarketplace() {
     const { myNfts, refetchNFTs, loading } = useGetMyNfts()
     const { refetch: refetchListings } = useGetListings()
 
-    const [activeTab, setActiveTab] = useState("my-nfts");
+    const [activeTab, setActiveTab] = useState("marketplace");
 
     useEffect(() => {
         if (isConnected && chain?.id !== arbitrumSepolia.id) {
@@ -60,8 +60,8 @@ export default function NFTMarketplace() {
                 <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="flex justify-between gap-2">
                         <TabsList className="mb-6">
-                            <TabsTrigger value="my-nfts">My NFTs</TabsTrigger>
                             <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
+                            <TabsTrigger value="my-nfts">My NFTs</TabsTrigger>
                         </TabsList>
                         <div className="flex gap-2">
                             <Button disabled={isPending} onClick={mintTestNFT}>Mint Test NFT</Button>

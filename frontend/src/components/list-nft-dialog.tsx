@@ -49,7 +49,7 @@ export default function ListNFTDialog({ nft, onSuccess, onClose }: ListNFTDialog
         listNFT(
             nft,
             price,
-            () => onSuccess(),
+            () => { setPrice(""); onSuccess() },
             (error) => console.error("Error listing NFT:", error)
         );
     }
