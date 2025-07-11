@@ -8,9 +8,9 @@ dataSources:
       name: Marketplace
       network: arbitrum-sepolia
       source:
-          address: "0xcbeb74fe5BFf48dE57e81DDF043F0ea5e01a93A3"
+          address: "0x2F208d78bDDcE727DBE41DC9C7BEd3eef6aBf9c9"
           abi: Marketplace
-          startBlock: 172482898
+          startBlock: 172504384
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.9
