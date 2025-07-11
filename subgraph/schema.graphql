@@ -1,4 +1,4 @@
-type Listing @entity(immutable: true) {
+type Listing @entity(immutable: false) {
     id: ID!
     seller: Bytes! # address
     nftAddress: Bytes! # address
