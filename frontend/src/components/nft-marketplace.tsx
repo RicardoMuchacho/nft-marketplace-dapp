@@ -1,17 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { formatEther, parseEther } from "viem"
-import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract, useBalance, useReadContracts, useSwitchChain } from "wagmi"
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wallet } from "lucide-react"
-import { NFTMarketplaceABI, NftsABI, NftMintingABI } from "@/lib/abi"
 import MyNftsTab from "./my-nfts-tab"
-import MarketplaceNftsTab from "./marketplace-nfts-tab"
-import useContractInteractions from "@/hooks/contractInteractions"
+import MarketplaceNftsTab from "./listings-tab"
+import useContractInteractions from "@/hooks/useContractInteractions"
 import useGetMyNfts from "@/hooks/useGetMyNfts"
 import { arbitrumSepolia } from "wagmi/chains"
+import { useGetListings } from "@/hooks/useGetListings"
 
 export default function NFTMarketplace() {
     const { address: userAddress, isConnected, chain } = useAccount()
@@ -20,6 +19,9 @@ export default function NFTMarketplace() {
     const { disconnect } = useDisconnect()
     const { mintTestNFT, isPending } = useContractInteractions()
     const { myNfts, refetchNFTs, loading } = useGetMyNfts()
+    const { refetch: refetchListings } = useGetListings()
+
+    const [activeTab, setActiveTab] = useState("marketplace");
 
     useEffect(() => {
         if (isConnected && chain?.id !== arbitrumSepolia.id) {
@@ -29,6 +31,10 @@ export default function NFTMarketplace() {
 
     const handleConnect = async () => {
         connect({ connector: connectors[0] });
+    }
+
+    const handleRefetch = async () => {
+        activeTab == "my-nfts" ? refetchNFTs() : refetchListings();
     }
 
     return (
@@ -51,15 +57,15 @@ export default function NFTMarketplace() {
             </div>
 
             {isConnected ? (
-                <Tabs defaultValue="my-nfts" className="w-full">
+                <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="flex justify-between gap-2">
                         <TabsList className="mb-6">
-                            {/* <TabsTrigger value="marketplace">Marketplace</TabsTrigger> */}
+                            <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
                             <TabsTrigger value="my-nfts">My NFTs</TabsTrigger>
                         </TabsList>
                         <div className="flex gap-2">
                             <Button disabled={isPending} onClick={mintTestNFT}>Mint Test NFT</Button>
-                            <Button disabled={loading} onClick={refetchNFTs}>Refresh NFTs</Button>
+                            <Button disabled={loading} onClick={handleRefetch}>Refresh NFTs</Button>
                         </div>
                     </div>
                     <MarketplaceNftsTab />

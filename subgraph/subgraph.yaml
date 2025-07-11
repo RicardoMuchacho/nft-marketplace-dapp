@@ -8,9 +8,9 @@ dataSources:
       name: Marketplace
       network: arbitrum-sepolia
       source:
-          address: "0x64A3F5EE729bE9AC744C39C443EDD51Ad36f87c2"
+          address: "0x2F208d78bDDcE727DBE41DC9C7BEd3eef6aBf9c9"
           abi: Marketplace
-          startBlock: 166062507
+          startBlock: 172504384
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.9
@@ -23,7 +23,7 @@ dataSources:
           eventHandlers:
               - event: boughtNFT(address,(address,address,uint256,uint256),uint256)
                 handler: handleboughtNFT
-              - event: listed(indexed address,indexed address,indexed uint256,uint256)
+              - event: listed(indexed address,indexed address,indexed uint256,uint256,string)
                 handler: handlelisted
               - event: unlisted(indexed address,(address,address,uint256,uint256))
                 handler: handleunlisted

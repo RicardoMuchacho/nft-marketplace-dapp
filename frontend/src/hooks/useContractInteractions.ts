@@ -1,4 +1,4 @@
-import { NftMintingABI, NFTMarketplaceABI } from "@/lib/abi";
+import { NftMintingABI, NFTMarketplaceABI, ERC721_ABI } from "@/lib/abi";
 import { NFT_MINT_ADDRESS, MARKETPLACE_CONTRACT_ADDRESS } from "@/lib/constants";
 import { useWriteContract, usePublicClient } from "wagmi";
 import { OwnedNft } from "alchemy-sdk";
@@ -11,23 +11,10 @@ export default function useContractInteractions() {
     const approveNFT = (nft: OwnedNft) => {
         writeContract({
             address: nft.contract.address as `0x${string}`,
-            abi: NftMintingABI,
+            abi: ERC721_ABI,
             functionName: "approve",
             args: [MARKETPLACE_CONTRACT_ADDRESS, nft.tokenId],
         });
-    };
-
-    const mintTestNFT = async () => {
-        try {
-            const res = writeContract({
-                address: NFT_MINT_ADDRESS,
-                abi: NftMintingABI,
-                functionName: "mint"
-            });
-            console.log(res)
-        } catch (error) {
-            console.log(error)
-        }
     };
 
     const checkNFTApproval = async (nft: OwnedNft) => {
@@ -35,11 +22,10 @@ export default function useContractInteractions() {
             console.error("Public client not available");
             return false;
         }
-
         try {
             const approvedAddress = await publicClient.readContract({
                 address: nft.contract.address as `0x${string}`,
-                abi: NftMintingABI,
+                abi: ERC721_ABI,
                 functionName: 'getApproved',
                 args: [BigInt(nft.tokenId)],
             });
@@ -47,6 +33,18 @@ export default function useContractInteractions() {
         } catch (error) {
             console.error("Error checking NFT approval:", error);
             return false;
+        }
+    };
+
+    const mintTestNFT = async () => {
+        try {
+            writeContract({
+                address: NFT_MINT_ADDRESS,
+                abi: NftMintingABI,
+                functionName: "mint"
+            });
+        } catch (error) {
+            console.log(error)
         }
     };
 

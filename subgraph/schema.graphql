@@ -4,6 +4,7 @@ type Listing @entity(immutable: false) {
     nftAddress: Bytes! # address
     tokenId: BigInt! # uint256
     price: BigInt! # uint256
+    tokenUri: String
     blockNumber: BigInt!
     blockTimestamp: BigInt!
     transactionHash: Bytes!

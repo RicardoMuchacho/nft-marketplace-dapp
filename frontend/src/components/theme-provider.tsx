@@ -1,4 +1,4 @@
-"use client"; // Required for client-side context/providers in Next.js 13+
+"use client";
 
 import { ThemeProvider as NextThemesProvider, ThemeProviderProps } from "next-themes";
 

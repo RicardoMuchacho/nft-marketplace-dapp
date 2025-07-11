@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { OwnedNft } from "alchemy-sdk";
-import useContractInteractions from "@/hooks/contractInteractions";
+import useContractInteractions from "@/hooks/useContractInteractions";
 
 interface ListNFTDialogProps {
     nft: OwnedNft | null;
@@ -25,7 +25,6 @@ export default function ListNFTDialog({ nft, onSuccess, onClose }: ListNFTDialog
     const { approveNFT, listNFT, isPending, checkNFTApproval } = useContractInteractions();
 
     useEffect(() => {
-        console.log(nft)
         if (!nft) {
             setIsApproved(false);
             return;
@@ -33,14 +32,13 @@ export default function ListNFTDialog({ nft, onSuccess, onClose }: ListNFTDialog
 
         const checkApproval = async () => {
             const res = await checkNFTApproval(nft);
-            console.log(res);
             setIsApproved(res);
         }
         checkApproval();
     }, [nft]);
 
     const handleApproveNft = () => {
-        if (!nft || !price) return;
+        if (!nft) return;
         approveNFT(nft);
         setIsApproved(true);
     }
@@ -50,7 +48,7 @@ export default function ListNFTDialog({ nft, onSuccess, onClose }: ListNFTDialog
         listNFT(
             nft,
             price,
-            () => onSuccess(),
+            () => { setPrice(""); onSuccess() },
             (error) => console.error("Error listing NFT:", error)
         );
     }
