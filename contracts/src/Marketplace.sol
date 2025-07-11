@@ -6,6 +6,7 @@ import "../lib/openzeppelin-contracts/contracts/interfaces/IERC721.sol";
 import "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 import {Strings} from "../lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
 contract Marketplace is Ownable, ReentrancyGuard {
     using Strings for uint256;
@@ -23,7 +24,7 @@ contract Marketplace is Ownable, ReentrancyGuard {
     // Nested mapping
     mapping(address nftAddress => mapping(uint256 tokenId => Listing)) public listings;
 
-    event listed(address indexed seller, address indexed nftAddress, uint256 indexed tokenId, uint256 price);
+    event listed(address indexed seller, address indexed nftAddress, uint256 indexed tokenI, uint256 price, string tokenUri);
     event unlisted(address indexed seller, Listing listing);
     event boughtNFT(address buyer, Listing listing, uint256 fees);
     event feesCollected(uint256 fees);
@@ -35,12 +36,14 @@ contract Marketplace is Ownable, ReentrancyGuard {
         require(price_ > 0, "Price can't be 0");
         require(IERC721(nftAddress_).ownerOf(tokenId_) == msg.sender, "Only owner can list NFT");
 
+        string memory tokenUri = IERC721Metadata(nftAddress_).tokenURI(tokenId_);
+
         Listing memory listing_ =
             Listing({nftAddress: nftAddress_, seller: msg.sender, tokenId: tokenId_, price: price_});
 
         listings[listing_.nftAddress][listing_.tokenId] = listing_;
 
-        emit listed(msg.sender, nftAddress_, tokenId_, price_);
+        emit listed(msg.sender, nftAddress_, tokenId_, price_, tokenUri);
     }
 
     // Unlist NFT
